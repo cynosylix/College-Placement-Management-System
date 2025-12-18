@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}TPO Dashboard · CPMS{% endblock %}
+
+{% block content %}
+  <div class="mx-auto" style="max-width: 980px;">
+    <div class="p-4 p-md-5 bg-white rounded-3 shadow-sm border">
+      <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
+        <div>
+          <div class="badge text-bg-dark mb-2">TPO Portal</div>
+          <h1 class="h4 fw-bold mb-1">TPO Dashboard</h1>
+          <p class="text-secondary mb-0">Welcome, {{ user.username }}.</p>
+        </div>
+        <a class="btn btn-outline-dark" href="{% url 'home' %}">Main home</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Access denied · CPMS{% endblock %}
+
+{% block content %}
+  <div class="mx-auto" style="max-width: 720px;">
+    <div class="p-4 p-md-5 bg-white rounded-3 shadow-sm border">
+      <div class="badge text-bg-danger mb-3">403</div>
+      <h1 class="h4 fw-bold mb-2">Access denied</h1>
+      <p class="text-secondary mb-4">You don’t have permission to access this portal with your current account.</p>
+      <a class="btn btn-primary" href="{% url 'home' %}">Go home</a>
+    </div>
+  </div>
+{% endblock %}
+
+

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Choose portal · CPMS{% endblock %}
+
+{% block content %}
+  <div class="cpms-wide">
+    <div class="text-center mb-4">
+      <h1 class="h3 fw-bold mb-1">Create an account</h1>
+      <p class="text-secondary mb-0">Select your portal to continue registration.</p>
+    </div>
+
+    <div class="row g-3 g-md-4">
+      <div class="col-12 col-md-4">
+        <div class="card h-100 cpms-card">
+          <div class="card-body p-4">
+            <div class="badge text-bg-primary mb-3">Student</div>
+            <h2 class="h5 fw-bold">Student Portal</h2>
+            <p class="text-secondary mb-4">Create your profile and apply for eligible placement drives.</p>
+            <a class="btn btn-primary w-100" href="{% url 'register_student' %}">Register as Student</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="card h-100 cpms-card">
+          <div class="card-body p-4">
+            <div class="badge text-bg-dark mb-3">TPO</div>
+            <h2 class="h5 fw-bold">TPO Portal</h2>
+            <p class="text-secondary mb-4">Manage students, drives, and placement workflows in one place.</p>
+            <a class="btn btn-dark w-100" href="{% url 'register_tpo' %}">Register as TPO</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="card h-100 cpms-card">
+          <div class="card-body p-4">
+            <div class="badge text-bg-success mb-3">Recruiter</div>
+            <h2 class="h5 fw-bold">Recruiter Portal</h2>
+            <p class="text-secondary mb-4">Post requirements, review candidates, and schedule interviews.</p>
+            <a class="btn btn-success w-100" href="{% url 'register_recruiter' %}">Register as Recruiter</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-4 text-secondary">
+      Already have an account?
+      <a class="link-primary fw-semibold" href="{% url 'login' %}">Sign in</a>
+    </div>
+  </div>
+{% endblock %}
+
+
