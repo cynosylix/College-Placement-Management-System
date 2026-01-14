@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}{{ job.title }} · Student Portal{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="cpms-wide cpms-fade-in">
+      <div class="mb-3">
+        <a href="{% url 'student:job_search' %}" class="text-decoration-none">
+          <i class="bi bi-arrow-left me-1"></i>Back to Jobs
+        </a>
+      </div>
+
+      <div class="cpms-card mb-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="badge bg-{% if job.job_type == 'internship' %}info{% elif job.job_type == 'full_time' %}success{% else %}secondary{% endif %} mb-2">
+                {{ job.get_job_type_display }}
+              </span>
+              <h1 class="h3 fw-bold mb-2">{{ job.title }}</h1>
+              <p class="text-secondary mb-1">
+                <i class="bi bi-building me-1"></i>{{ job.company_name }}
+              </p>
+              {% if job.location %}
+                <p class="text-secondary mb-1">
+                  <i class="bi bi-geo-alt me-1"></i>{{ job.location }}
+                </p>
+              {% endif %}
+              {% if job.salary_range %}
+                <p class="text-secondary mb-0">
+                  <i class="bi bi-currency-dollar me-1"></i>{{ job.salary_range }}
+                </p>
+              {% endif %}
+            </div>
+            <div>
+              {% if is_saved %}
+                <form method="post" class="d-inline">
+                  {% csrf_token %}
+                  <button type="submit" name="unsave" class="btn btn-warning btn-sm">
+                    <i class="bi bi-bookmark-fill me-1"></i>Saved
+                  </button>
+                </form>
+              {% else %}
+                <form method="post" class="d-inline">
+                  {% csrf_token %}
+                  <button type="submit" name="save" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-bookmark me-1"></i>Save
+                  </button>
+                </form>
+              {% endif %}
+            </div>
+          </div>
+
+          <hr>
+
+          <div class="mb-4">
+            <h3 class="h5 fw-bold mb-3">Job Description</h3>
+            <div class="text-secondary">{{ job.description|linebreaks }}</div>
+          </div>
+
+          <div class="mb-4">
+            <h3 class="h5 fw-bold mb-3">Requirements</h3>
+            <div class="text-secondary">{{ job.requirements|linebreaks }}</div>
+          </div>
+
+          {% if job.application_deadline %}
+            <div class="alert alert-info">
+              <i class="bi bi-calendar-event me-2"></i>
+              <strong>Application Deadline:</strong> {{ job.application_deadline|date:"F d, Y h:i A" }}
+            </div>
+          {% endif %}
+
+          {% if application %}
+            <div class="alert alert-success">
+              <i class="bi bi-check-circle me-2"></i>
+              <strong>You have applied for this position.</strong>
+              <a href="{% url 'student:application_detail' application.pk %}" class="alert-link">View Application Status</a>
+            </div>
+          {% else %}
+            <hr>
+            <h3 class="h5 fw-bold mb-3">Apply for this Position</h3>
+            <form method="post">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label class="form-label">Select Resume</label>
+                {{ app_form.resume }}
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Cover Letter (Optional)</label>
+                {{ app_form.cover_letter }}
+              </div>
+              <button type="submit" name="apply" class="btn btn-primary btn-lg">
+                <i class="bi bi-send me-2"></i>Submit Application
+              </button>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

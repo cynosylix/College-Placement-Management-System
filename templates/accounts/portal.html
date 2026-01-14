@@ -3,52 +3,77 @@
 {% block title %}Choose portal · CPMS{% endblock %}
 
 {% block content %}
-  <div class="cpms-wide">
-    <div class="text-center mb-4">
-      <h1 class="h3 fw-bold mb-1">Create an account</h1>
-      <p class="text-secondary mb-0">Select your portal to continue registration.</p>
-    </div>
+  <div class="container">
+    <div class="cpms-wide cpms-fade-in">
+      <div class="text-center mb-5">
+        <h1 class="h2 fw-bold mb-2">Create an account</h1>
+        <p class="text-secondary lead">Select your portal to continue registration</p>
+      </div>
 
-    <div class="row g-3 g-md-4">
-      <div class="col-12 col-md-4">
-        <div class="card h-100 cpms-card">
-          <div class="card-body p-4">
-            <div class="badge text-bg-primary mb-3">Student</div>
-            <h2 class="h5 fw-bold">Student Portal</h2>
-            <p class="text-secondary mb-4">Create your profile and apply for eligible placement drives.</p>
-            <a class="btn btn-primary w-100" href="{% url 'register_student' %}">Register as Student</a>
+      <div class="row g-4">
+        <div class="col-12 col-md-4">
+          <div class="cpms-portal-card">
+            <div class="card-body p-4 p-md-5">
+              <div class="cpms-portal-icon mx-auto text-bg-primary">
+                <i class="bi bi-mortarboard-fill"></i>
+              </div>
+              <div class="text-center mb-3">
+                <span class="badge text-bg-primary mb-3">Student</span>
+                <h2 class="h5 fw-bold mb-2">Student Portal</h2>
+                <p class="text-secondary mb-4 small">Create your profile, browse placement drives, and apply for opportunities that match your skills.</p>
+              </div>
+              <a class="btn btn-primary w-100" href="{% url 'register_student' %}">
+                <i class="bi bi-arrow-right me-2"></i>Register as Student
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+          <div class="cpms-portal-card">
+            <div class="card-body p-4 p-md-5">
+              <div class="cpms-portal-icon mx-auto text-bg-dark">
+                <i class="bi bi-briefcase-fill"></i>
+              </div>
+              <div class="text-center mb-3">
+                <span class="badge text-bg-dark mb-3">TPO</span>
+                <h2 class="h5 fw-bold mb-2">TPO Portal</h2>
+                <p class="text-secondary mb-4 small">Manage students, coordinate placement drives, and streamline the entire placement process.</p>
+              </div>
+              <a class="btn btn-dark w-100" href="{% url 'register_tpo' %}">
+                <i class="bi bi-arrow-right me-2"></i>Register as TPO
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+          <div class="cpms-portal-card">
+            <div class="card-body p-4 p-md-5">
+              <div class="cpms-portal-icon mx-auto text-bg-success">
+                <i class="bi bi-building-fill"></i>
+              </div>
+              <div class="text-center mb-3">
+                <span class="badge text-bg-success mb-3">Recruiter</span>
+                <h2 class="h5 fw-bold mb-2">Recruiter Portal</h2>
+                <p class="text-secondary mb-4 small">Post job requirements, review candidate profiles, and schedule interviews with qualified students.</p>
+              </div>
+              <a class="btn btn-success w-100" href="{% url 'register_recruiter' %}">
+                <i class="bi bi-arrow-right me-2"></i>Register as Recruiter
+              </a>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="col-12 col-md-4">
-        <div class="card h-100 cpms-card">
-          <div class="card-body p-4">
-            <div class="badge text-bg-dark mb-3">TPO</div>
-            <h2 class="h5 fw-bold">TPO Portal</h2>
-            <p class="text-secondary mb-4">Manage students, drives, and placement workflows in one place.</p>
-            <a class="btn btn-dark w-100" href="{% url 'register_tpo' %}">Register as TPO</a>
-          </div>
-        </div>
+      <div class="text-center mt-5">
+        <p class="text-secondary mb-0">
+          Already have an account?
+          <a class="link-primary fw-semibold text-decoration-none" href="{% url 'login' %}">
+            <i class="bi bi-box-arrow-in-right me-1"></i>Sign in
+          </a>
+        </p>
       </div>
-
-      <div class="col-12 col-md-4">
-        <div class="card h-100 cpms-card">
-          <div class="card-body p-4">
-            <div class="badge text-bg-success mb-3">Recruiter</div>
-            <h2 class="h5 fw-bold">Recruiter Portal</h2>
-            <p class="text-secondary mb-4">Post requirements, review candidates, and schedule interviews.</p>
-            <a class="btn btn-success w-100" href="{% url 'register_recruiter' %}">Register as Recruiter</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="text-center mt-4 text-secondary">
-      Already have an account?
-      <a class="link-primary fw-semibold" href="{% url 'login' %}">Sign in</a>
     </div>
   </div>
 {% endblock %}
-
-

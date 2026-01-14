@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}Profile · Student Portal{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="cpms-wide cpms-fade-in">
+      <div class="cpms-dashboard-header mb-4">
+        <h1 class="h3 fw-bold mb-0">
+          <i class="bi bi-person-badge me-2"></i>My Profile
+        </h1>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-12 col-lg-8">
+          <div class="cpms-card">
+            <div class="card-body">
+              <h3 class="h5 fw-bold mb-4">Personal Information</h3>
+              <form method="post">
+                {% csrf_token %}
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Phone</label>
+                    {{ form.phone }}
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Date of Birth</label>
+                    {{ form.date_of_birth }}
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Address</label>
+                    {{ form.address }}
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">LinkedIn</label>
+                    {{ form.linkedin_url }}
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">GitHub</label>
+                    {{ form.github_url }}
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Portfolio URL</label>
+                    {{ form.portfolio_url }}
+                  </div>
+                </div>
+
+                <hr class="my-4">
+
+                <h3 class="h5 fw-bold mb-4">Academic Information</h3>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Enrollment Number</label>
+                    {{ form.enrollment_number }}
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Course</label>
+                    {{ form.course }}
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Branch</label>
+                    {{ form.branch }}
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Year</label>
+                    {{ form.year }}
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">CGPA</label>
+                    {{ form.cgpa }}
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Graduation Year</label>
+                    {{ form.graduation_year }}
+                  </div>
+                </div>
+
+                <hr class="my-4">
+
+                <div class="mb-3">
+                  <label class="form-label">Bio</label>
+                  {{ form.bio }}
+                </div>
+                <div class="mb-4">
+                  <label class="form-label">Achievements</label>
+                  {{ form.achievements }}
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-save me-2"></i>Save Changes
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+          <div class="cpms-card mb-4">
+            <div class="card-body">
+              <h3 class="h5 fw-bold mb-3">Skills</h3>
+              {% if skills %}
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                  {% for skill in skills %}
+                    <span class="badge bg-primary">
+                      {{ skill.name }} ({{ skill.get_proficiency_level_display }})
+                      <a href="{% url 'student:skill_delete' skill.pk %}" class="text-white ms-1" onclick="return confirm('Delete this skill?')">
+                        <i class="bi bi-x"></i>
+                      </a>
+                    </span>
+                  {% endfor %}
+                </div>
+              {% endif %}
+              <form method="post" action="{% url 'student:skill_add' %}">
+                {% csrf_token %}
+                <div class="input-group mb-2">
+                  <input type="text" name="name" class="form-control" placeholder="Skill name" required>
+                  <select name="proficiency_level" class="form-select" style="max-width: 150px;">
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate" selected>Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                    <option value="expert">Expert</option>
+                  </select>
+                  <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-plus"></i>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="cpms-card">
+            <div class="card-body">
+              <h3 class="h5 fw-bold mb-3">Certifications</h3>
+              {% if certifications %}
+                <div class="list-group list-group-flush">
+                  {% for cert in certifications %}
+                    <div class="list-group-item border-0 px-0 py-2">
+                      <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                          <h6 class="mb-1 fw-semibold">{{ cert.name }}</h6>
+                          <p class="text-secondary small mb-0">{{ cert.issuer }}</p>
+                          {% if cert.issue_date %}
+                            <small class="text-muted">{{ cert.issue_date|date:"M Y" }}</small>
+                          {% endif %}
+                        </div>
+                        <a href="{% url 'student:certification_delete' cert.pk %}" class="text-danger" onclick="return confirm('Delete this certification?')">
+                          <i class="bi bi-trash"></i>
+                        </a>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+              <a href="#" class="btn btn-outline-primary btn-sm w-100 mt-3" data-bs-toggle="modal" data-bs-target="#certModal">
+                <i class="bi bi-plus me-1"></i>Add Certification
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Certification Modal -->
+  <div class="modal fade" id="certModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Certification</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form method="post" action="{% url 'student:certification_add' %}">
+          {% csrf_token %}
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" name="name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Issuer</label>
+              <input type="text" name="issuer" class="form-control" required>
+            </div>
+            <div class="row g-2">
+              <div class="col-md-6">
+                <label class="form-label">Issue Date</label>
+                <input type="date" name="issue_date" class="form-control">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Expiry Date</label>
+                <input type="date" name="expiry_date" class="form-control">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Credential ID</label>
+              <input type="text" name="credential_id" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Credential URL</label>
+              <input type="url" name="credential_url" class="form-control">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Add Certification</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

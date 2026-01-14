@@ -3,18 +3,201 @@
 {% block title %}Student Dashboard · CPMS{% endblock %}
 
 {% block content %}
-  <div class="mx-auto" style="max-width: 980px;">
-    <div class="p-4 p-md-5 bg-white rounded-3 shadow-sm border">
-      <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
-        <div>
-          <div class="badge text-bg-primary mb-2">Student Portal</div>
-          <h1 class="h4 fw-bold mb-1">Student Dashboard</h1>
-          <p class="text-secondary mb-0">Welcome, {{ user.username }}.</p>
+  <div class="container">
+    <div class="cpms-wide cpms-fade-in">
+      <div class="cpms-dashboard-header">
+        <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
+          <div>
+            <span class="badge text-bg-primary mb-2">
+              <i class="bi bi-mortarboard-fill me-1"></i>Student Portal
+            </span>
+            <h1 class="h3 fw-bold mb-1">Welcome back, {{ user.username }}!</h1>
+            <p class="text-secondary mb-0">Manage your profile and track your placement applications</p>
+          </div>
         </div>
-        <a class="btn btn-outline-primary" href="{% url 'home' %}">Main home</a>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="cpms-stat-card">
+            <div class="cpms-stat-icon primary">
+              <i class="bi bi-file-earmark-text"></i>
+            </div>
+            <h3 class="h4 fw-bold mb-1">{{ stats.total_applications }}</h3>
+            <p class="text-secondary small mb-0">Applications</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="cpms-stat-card">
+            <div class="cpms-stat-icon success">
+              <i class="bi bi-check-circle"></i>
+            </div>
+            <h3 class="h4 fw-bold mb-1">{{ stats.shortlisted }}</h3>
+            <p class="text-secondary small mb-0">Shortlisted</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="cpms-stat-card">
+            <div class="cpms-stat-icon warning">
+              <i class="bi bi-clock-history"></i>
+            </div>
+            <h3 class="h4 fw-bold mb-1">{{ stats.pending }}</h3>
+            <p class="text-secondary small mb-0">Pending</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="cpms-stat-card">
+            <div class="cpms-stat-icon danger">
+              <i class="bi bi-calendar-event"></i>
+            </div>
+            <h3 class="h4 fw-bold mb-1">{{ stats.interviews }}</h3>
+            <p class="text-secondary small mb-0">Interviews</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <div class="col-12 col-md-6">
+          <div class="cpms-card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <h3 class="h5 fw-bold mb-0">
+                  <i class="bi bi-lightning-charge-fill text-primary me-2"></i>Quick Actions
+                </h3>
+              </div>
+              <div class="d-grid gap-2">
+                <a href="{% url 'student:profile' %}" class="cpms-quick-action">
+                  <div class="cpms-quick-action-icon">
+                    <i class="bi bi-person-badge"></i>
+                  </div>
+                  <h4 class="h6 fw-semibold mb-1">Update Profile</h4>
+                  <p class="text-secondary small mb-0">Complete your profile information</p>
+                </a>
+                <a href="{% url 'student:job_search' %}" class="cpms-quick-action">
+                  <div class="cpms-quick-action-icon">
+                    <i class="bi bi-search"></i>
+                  </div>
+                  <h4 class="h6 fw-semibold mb-1">Browse Jobs</h4>
+                  <p class="text-secondary small mb-0">Explore available placement opportunities</p>
+                </a>
+                <a href="{% url 'student:resume_list' %}" class="cpms-quick-action">
+                  <div class="cpms-quick-action-icon">
+                    <i class="bi bi-file-earmark-text"></i>
+                  </div>
+                  <h4 class="h6 fw-semibold mb-1">Manage Resumes</h4>
+                  <p class="text-secondary small mb-0">Create and edit your resumes</p>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="cpms-card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <h3 class="h5 fw-bold mb-0">
+                  <i class="bi bi-bell-fill text-primary me-2"></i>Recent Notifications
+                </h3>
+                <a href="{% url 'student:notification_list' %}" class="btn btn-sm btn-outline-primary">View All</a>
+              </div>
+              {% if recent_notifications %}
+                <div class="list-group list-group-flush">
+                  {% for notification in recent_notifications %}
+                    <div class="list-group-item border-0 px-0 py-2">
+                      <div class="d-flex align-items-start">
+                        <i class="bi bi-{% if notification.notification_type == 'interview' %}calendar-event{% elif notification.notification_type == 'application_update' %}file-check{% else %}bell{% endif %}-fill text-primary me-2 mt-1"></i>
+                        <div class="flex-grow-1">
+                          <h6 class="mb-1 fw-semibold">{{ notification.title }}</h6>
+                          <p class="text-secondary small mb-0">{{ notification.message|truncatewords:15 }}</p>
+                          <small class="text-muted">{{ notification.created_at|timesince }} ago</small>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <div class="text-center py-4">
+                  <i class="bi bi-inbox text-secondary" style="font-size: 3rem;"></i>
+                  <p class="text-secondary mt-3 mb-0">No new notifications</p>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-12 col-md-6">
+          <div class="cpms-card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <h3 class="h5 fw-bold mb-0">
+                  <i class="bi bi-file-earmark-check text-primary me-2"></i>Recent Applications
+                </h3>
+                <a href="{% url 'student:application_list' %}" class="btn btn-sm btn-outline-primary">View All</a>
+              </div>
+              {% if recent_applications %}
+                <div class="list-group list-group-flush">
+                  {% for app in recent_applications %}
+                    <a href="{% url 'student:application_detail' app.pk %}" class="list-group-item list-group-item-action border-0 px-0 py-2">
+                      <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                          <h6 class="mb-1 fw-semibold">{{ app.job.title }}</h6>
+                          <p class="text-secondary small mb-0">{{ app.job.company_name }}</p>
+                        </div>
+                        <span class="badge bg-{% if app.status == 'shortlisted' %}success{% elif app.status == 'rejected' %}danger{% elif app.status == 'applied' %}primary{% else %}warning{% endif %}">
+                          {{ app.get_status_display }}
+                        </span>
+                      </div>
+                    </a>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <div class="text-center py-4">
+                  <i class="bi bi-inbox text-secondary" style="font-size: 3rem;"></i>
+                  <p class="text-secondary mt-3 mb-0">No applications yet</p>
+                  <a href="{% url 'student:job_search' %}" class="btn btn-primary btn-sm mt-2">Browse Jobs</a>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="cpms-card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <h3 class="h5 fw-bold mb-0">
+                  <i class="bi bi-calendar-event text-primary me-2"></i>Upcoming Interviews
+                </h3>
+                <a href="{% url 'student:interview_list' %}" class="btn btn-sm btn-outline-primary">View All</a>
+              </div>
+              {% if upcoming_interviews %}
+                <div class="list-group list-group-flush">
+                  {% for interview in upcoming_interviews %}
+                    <div class="list-group-item border-0 px-0 py-2">
+                      <div class="d-flex align-items-start">
+                        <i class="bi bi-calendar-check-fill text-success me-2 mt-1"></i>
+                        <div class="flex-grow-1">
+                          <h6 class="mb-1 fw-semibold">{{ interview.application.job.title }}</h6>
+                          <p class="text-secondary small mb-0">{{ interview.application.job.company_name }}</p>
+                          <small class="text-muted">
+                            <i class="bi bi-clock me-1"></i>{{ interview.scheduled_at|date:"M d, Y h:i A" }}
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <div class="text-center py-4">
+                  <i class="bi bi-calendar-x text-secondary" style="font-size: 3rem;"></i>
+                  <p class="text-secondary mt-3 mb-0">No upcoming interviews</p>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 {% endblock %}
-
-

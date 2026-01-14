@@ -3,18 +3,106 @@
 {% block title %}Recruiter Dashboard · CPMS{% endblock %}
 
 {% block content %}
-  <div class="mx-auto" style="max-width: 980px;">
-    <div class="p-4 p-md-5 bg-white rounded-3 shadow-sm border">
-      <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
-        <div>
-          <div class="badge text-bg-success mb-2">Recruiter Portal</div>
-          <h1 class="h4 fw-bold mb-1">Recruiter Dashboard</h1>
-          <p class="text-secondary mb-0">Welcome, {{ user.username }}.</p>
+  <div class="container">
+    <div class="cpms-wide cpms-fade-in">
+      <div class="cpms-dashboard-header">
+        <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
+          <div>
+            <span class="badge text-bg-success mb-2">
+              <i class="bi bi-building-fill me-1"></i>Recruiter Portal
+            </span>
+            <h1 class="h3 fw-bold mb-1">Welcome, {{ user.username }}!</h1>
+            <p class="text-secondary mb-0">Post requirements, review candidates, and manage your recruitment process</p>
+          </div>
         </div>
-        <a class="btn btn-outline-success" href="{% url 'home' %}">Main home</a>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="cpms-stat-card">
+            <div class="cpms-stat-icon primary">
+              <i class="bi bi-file-earmark-post"></i>
+            </div>
+            <h3 class="h4 fw-bold mb-1">0</h3>
+            <p class="text-secondary small mb-0">Job Postings</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="cpms-stat-card">
+            <div class="cpms-stat-icon success">
+              <i class="bi bi-person-check"></i>
+            </div>
+            <h3 class="h4 fw-bold mb-1">0</h3>
+            <p class="text-secondary small mb-0">Applications</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="cpms-stat-card">
+            <div class="cpms-stat-icon warning">
+              <i class="bi bi-people"></i>
+            </div>
+            <h3 class="h4 fw-bold mb-1">0</h3>
+            <p class="text-secondary small mb-0">Shortlisted</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="cpms-stat-card">
+            <div class="cpms-stat-icon danger">
+              <i class="bi bi-calendar-check"></i>
+            </div>
+            <h3 class="h4 fw-bold mb-1">0</h3>
+            <p class="text-secondary small mb-0">Interviews</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-12 col-md-6">
+          <div class="cpms-card">
+            <div class="card-body">
+              <h3 class="h5 fw-bold mb-3">
+                <i class="bi bi-lightning-charge-fill text-success me-2"></i>Quick Actions
+              </h3>
+              <div class="d-grid gap-2">
+                <a href="#" class="cpms-quick-action">
+                  <div class="cpms-quick-action-icon">
+                    <i class="bi bi-plus-circle"></i>
+                  </div>
+                  <h4 class="h6 fw-semibold mb-1">Post Job</h4>
+                  <p class="text-secondary small mb-0">Create a new job posting</p>
+                </a>
+                <a href="#" class="cpms-quick-action">
+                  <div class="cpms-quick-action-icon">
+                    <i class="bi bi-search"></i>
+                  </div>
+                  <h4 class="h6 fw-semibold mb-1">Browse Candidates</h4>
+                  <p class="text-secondary small mb-0">Search and filter student profiles</p>
+                </a>
+                <a href="#" class="cpms-quick-action">
+                  <div class="cpms-quick-action-icon">
+                    <i class="bi bi-calendar-event"></i>
+                  </div>
+                  <h4 class="h6 fw-semibold mb-1">Schedule Interview</h4>
+                  <p class="text-secondary small mb-0">Set up interview sessions</p>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="cpms-card">
+            <div class="card-body">
+              <h3 class="h5 fw-bold mb-3">
+                <i class="bi bi-bell-fill text-success me-2"></i>Recent Activity
+              </h3>
+              <div class="text-center py-4">
+                <i class="bi bi-inbox text-secondary" style="font-size: 3rem;"></i>
+                <p class="text-secondary mt-3 mb-0">No recent activity</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 {% endblock %}
-
-

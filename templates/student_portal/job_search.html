@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Job Search · Student Portal{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="cpms-wide cpms-fade-in">
+      <div class="cpms-dashboard-header mb-4">
+        <h1 class="h3 fw-bold mb-0">
+          <i class="bi bi-search me-2"></i>Browse Opportunities
+        </h1>
+      </div>
+
+      <div class="cpms-card mb-4">
+        <div class="card-body">
+          <form method="get" class="row g-3">
+            <div class="col-md-5">
+              {{ form.search }}
+            </div>
+            <div class="col-md-3">
+              {{ form.job_type }}
+            </div>
+            <div class="col-md-3">
+              {{ form.location }}
+            </div>
+            <div class="col-md-1">
+              <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-search"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      {% if page_obj %}
+        <div class="row g-4">
+          {% for job in page_obj %}
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="cpms-card h-100">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <span class="badge bg-{% if job.job_type == 'internship' %}info{% elif job.job_type == 'full_time' %}success{% else %}secondary{% endif %}">
+                      {{ job.get_job_type_display }}
+                    </span>
+                    {% if job.id in saved_job_ids %}
+                      <i class="bi bi-bookmark-fill text-warning"></i>
+                    {% endif %}
+                  </div>
+                  <h4 class="h5 fw-bold mb-2">{{ job.title }}</h4>
+                  <p class="text-secondary small mb-2">
+                    <i class="bi bi-building me-1"></i>{{ job.company_name }}
+                  </p>
+                  {% if job.location %}
+                    <p class="text-secondary small mb-2">
+                      <i class="bi bi-geo-alt me-1"></i>{{ job.location }}
+                    </p>
+                  {% endif %}
+                  {% if job.salary_range %}
+                    <p class="text-secondary small mb-3">
+                      <i class="bi bi-currency-dollar me-1"></i>{{ job.salary_range }}
+                    </p>
+                  {% endif %}
+                  <p class="text-secondary small mb-3">{{ job.description|truncatewords:20 }}</p>
+                  <div class="d-flex gap-2">
+                    <a href="{% url 'student:job_detail' job.pk %}" class="btn btn-primary btn-sm flex-grow-1">
+                      View Details
+                    </a>
+                    {% if job.id not in applied_job_ids %}
+                      {% if job.id in saved_job_ids %}
+                        <a href="{% url 'student:job_detail' job.pk %}" class="btn btn-outline-warning btn-sm">
+                          <i class="bi bi-bookmark-fill"></i>
+                        </a>
+                      {% else %}
+                        <a href="{% url 'student:job_detail' job.pk %}" class="btn btn-outline-secondary btn-sm">
+                          <i class="bi bi-bookmark"></i>
+                        </a>
+                      {% endif %}
+                    {% endif %}
+                  </div>
+                  {% if job.id in applied_job_ids %}
+                    <small class="text-success d-block mt-2">
+                      <i class="bi bi-check-circle me-1"></i>Already Applied
+                    </small>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        {% if page_obj.has_other_pages %}
+          <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+              {% if page_obj.has_previous %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.job_type %}&job_type={{ request.GET.job_type }}{% endif %}{% if request.GET.location %}&location={{ request.GET.location }}{% endif %}">Previous</a>
+                </li>
+              {% endif %}
+              {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                  <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                  </li>
+                {% else %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.job_type %}&job_type={{ request.GET.job_type }}{% endif %}{% if request.GET.location %}&location={{ request.GET.location }}{% endif %}">{{ num }}</a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+              {% if page_obj.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.job_type %}&job_type={{ request.GET.job_type }}{% endif %}{% if request.GET.location %}&location={{ request.GET.location }}{% endif %}">Next</a>
+                </li>
+              {% endif %}
+            </ul>
+          </nav>
+        {% endif %}
+      {% else %}
+        <div class="cpms-card">
+          <div class="card-body text-center py-5">
+            <i class="bi bi-inbox text-secondary" style="font-size: 4rem;"></i>
+            <h4 class="mt-3 mb-2">No jobs found</h4>
+            <p class="text-secondary">Try adjusting your search filters</p>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

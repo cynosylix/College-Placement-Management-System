@@ -12,11 +12,11 @@ from .models import Profile
 def home(request):
     role = getattr(getattr(request.user, "profile", None), "role", None)
     if role == Profile.Role.STUDENT:
-        return redirect("student_portal:dashboard")
+        return redirect("student:dashboard")
     if role == Profile.Role.TPO:
-        return redirect("tpo_portal:dashboard")
+        return redirect("tpo:dashboard")
     if role == Profile.Role.RECRUITER:
-        return redirect("recruiter_portal:dashboard")
+        return redirect("recruiter:dashboard")
     return render(request, "home.html")
 
 

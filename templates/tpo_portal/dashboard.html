@@ -3,18 +3,106 @@
 {% block title %}TPO Dashboard · CPMS{% endblock %}
 
 {% block content %}
-  <div class="mx-auto" style="max-width: 980px;">
-    <div class="p-4 p-md-5 bg-white rounded-3 shadow-sm border">
-      <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
-        <div>
-          <div class="badge text-bg-dark mb-2">TPO Portal</div>
-          <h1 class="h4 fw-bold mb-1">TPO Dashboard</h1>
-          <p class="text-secondary mb-0">Welcome, {{ user.username }}.</p>
+  <div class="container">
+    <div class="cpms-wide cpms-fade-in">
+      <div class="cpms-dashboard-header">
+        <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
+          <div>
+            <span class="badge text-bg-dark mb-2">
+              <i class="bi bi-briefcase-fill me-1"></i>TPO Portal
+            </span>
+            <h1 class="h3 fw-bold mb-1">Welcome, {{ user.username }}!</h1>
+            <p class="text-secondary mb-0">Manage placements, students, and recruiters from one central dashboard</p>
+          </div>
         </div>
-        <a class="btn btn-outline-dark" href="{% url 'home' %}">Main home</a>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="cpms-stat-card">
+            <div class="cpms-stat-icon primary">
+              <i class="bi bi-people"></i>
+            </div>
+            <h3 class="h4 fw-bold mb-1">0</h3>
+            <p class="text-secondary small mb-0">Total Students</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="cpms-stat-card">
+            <div class="cpms-stat-icon success">
+              <i class="bi bi-building"></i>
+            </div>
+            <h3 class="h4 fw-bold mb-1">0</h3>
+            <p class="text-secondary small mb-0">Active Recruiters</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="cpms-stat-card">
+            <div class="cpms-stat-icon warning">
+              <i class="bi bi-calendar-event"></i>
+            </div>
+            <h3 class="h4 fw-bold mb-1">0</h3>
+            <p class="text-secondary small mb-0">Placement Drives</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="cpms-stat-card">
+            <div class="cpms-stat-icon danger">
+              <i class="bi bi-file-earmark-check"></i>
+            </div>
+            <h3 class="h4 fw-bold mb-1">0</h3>
+            <p class="text-secondary small mb-0">Applications</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-12 col-md-6">
+          <div class="cpms-card">
+            <div class="card-body">
+              <h3 class="h5 fw-bold mb-3">
+                <i class="bi bi-lightning-charge-fill text-dark me-2"></i>Quick Actions
+              </h3>
+              <div class="d-grid gap-2">
+                <a href="#" class="cpms-quick-action">
+                  <div class="cpms-quick-action-icon">
+                    <i class="bi bi-person-plus"></i>
+                  </div>
+                  <h4 class="h6 fw-semibold mb-1">Manage Students</h4>
+                  <p class="text-secondary small mb-0">View and manage student profiles</p>
+                </a>
+                <a href="#" class="cpms-quick-action">
+                  <div class="cpms-quick-action-icon">
+                    <i class="bi bi-calendar-plus"></i>
+                  </div>
+                  <h4 class="h6 fw-semibold mb-1">Create Drive</h4>
+                  <p class="text-secondary small mb-0">Schedule a new placement drive</p>
+                </a>
+                <a href="#" class="cpms-quick-action">
+                  <div class="cpms-quick-action-icon">
+                    <i class="bi bi-building-add"></i>
+                  </div>
+                  <h4 class="h6 fw-semibold mb-1">Add Recruiter</h4>
+                  <p class="text-secondary small mb-0">Register a new recruiter company</p>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="cpms-card">
+            <div class="card-body">
+              <h3 class="h5 fw-bold mb-3">
+                <i class="bi bi-graph-up-arrow text-dark me-2"></i>Overview
+              </h3>
+              <div class="text-center py-4">
+                <i class="bi bi-pie-chart text-secondary" style="font-size: 3rem;"></i>
+                <p class="text-secondary mt-3 mb-0">Analytics coming soon</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 {% endblock %}
-
-

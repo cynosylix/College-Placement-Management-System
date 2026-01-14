@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Application Details · Student Portal{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="cpms-wide cpms-fade-in">
+      <div class="mb-3">
+        <a href="{% url 'student:application_list' %}" class="text-decoration-none">
+          <i class="bi bi-arrow-left me-1"></i>Back to Applications
+        </a>
+      </div>
+
+      <div class="cpms-card mb-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+              <h1 class="h3 fw-bold mb-2">{{ application.job.title }}</h1>
+              <p class="text-secondary mb-1">
+                <i class="bi bi-building me-1"></i>{{ application.job.company_name }}
+              </p>
+              <span class="badge bg-{% if application.status == 'shortlisted' %}success{% elif application.status == 'rejected' %}danger{% elif application.status == 'applied' %}primary{% elif application.status == 'interview_scheduled' %}warning{% else %}secondary{% endif %}">
+                {{ application.get_status_display }}
+              </span>
+            </div>
+          </div>
+
+          <hr>
+
+          <div class="row g-4">
+            <div class="col-md-6">
+              <h3 class="h5 fw-bold mb-3">Application Details</h3>
+              <p class="mb-2">
+                <strong>Applied on:</strong> {{ application.applied_at|date:"F d, Y h:i A" }}
+              </p>
+              {% if application.resume %}
+                <p class="mb-2">
+                  <strong>Resume:</strong> {{ application.resume.title }}
+                </p>
+              {% endif %}
+              {% if application.cover_letter %}
+                <div class="mb-3">
+                  <strong>Cover Letter:</strong>
+                  <div class="text-secondary mt-2">{{ application.cover_letter|linebreaks }}</div>
+                </div>
+              {% endif %}
+            </div>
+            <div class="col-md-6">
+              <h3 class="h5 fw-bold mb-3">Job Information</h3>
+              <p class="mb-2">
+                <strong>Job Type:</strong> {{ application.job.get_job_type_display }}
+              </p>
+              {% if application.job.location %}
+                <p class="mb-2">
+                  <strong>Location:</strong> {{ application.job.location }}
+                </p>
+              {% endif %}
+              {% if application.job.salary_range %}
+                <p class="mb-2">
+                  <strong>Salary:</strong> {{ application.job.salary_range }}
+                </p>
+              {% endif %}
+            </div>
+          </div>
+
+          {% if interview %}
+            <hr>
+            <div class="alert alert-info">
+              <h5 class="alert-heading">
+                <i class="bi bi-calendar-event me-2"></i>Interview Scheduled
+              </h5>
+              <p class="mb-2">
+                <strong>Date & Time:</strong> {{ interview.scheduled_at|date:"F d, Y h:i A" }}
+              </p>
+              {% if interview.location %}
+                <p class="mb-2">
+                  <strong>Location:</strong> {{ interview.location }}
+                </p>
+              {% endif %}
+              {% if interview.meeting_link %}
+                <p class="mb-2">
+                  <strong>Meeting Link:</strong> 
+                  <a href="{{ interview.meeting_link }}" target="_blank">{{ interview.meeting_link }}</a>
+                </p>
+              {% endif %}
+              {% if interview.notes %}
+                <p class="mb-0">
+                  <strong>Notes:</strong> {{ interview.notes }}
+                </p>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

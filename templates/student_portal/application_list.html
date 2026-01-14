@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}My Applications · Student Portal{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="cpms-wide cpms-fade-in">
+      <div class="cpms-dashboard-header mb-4">
+        <h1 class="h3 fw-bold mb-0">
+          <i class="bi bi-file-earmark-check me-2"></i>My Applications
+        </h1>
+      </div>
+
+      <div class="cpms-card mb-4">
+        <div class="card-body">
+          <div class="btn-group" role="group">
+            <a href="{% url 'student:application_list' %}" class="btn btn-{% if not status_filter %}primary{% else %}outline-primary{% endif %}">
+              All
+            </a>
+            <a href="?status=applied" class="btn btn-{% if status_filter == 'applied' %}primary{% else %}outline-primary{% endif %}">
+              Applied
+            </a>
+            <a href="?status=under_review" class="btn btn-{% if status_filter == 'under_review' %}primary{% else %}outline-primary{% endif %}">
+              Under Review
+            </a>
+            <a href="?status=shortlisted" class="btn btn-{% if status_filter == 'shortlisted' %}primary{% else %}outline-primary{% endif %}">
+              Shortlisted
+            </a>
+            <a href="?status=rejected" class="btn btn-{% if status_filter == 'rejected' %}primary{% else %}outline-primary{% endif %}">
+              Rejected
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {% if page_obj %}
+        <div class="row g-4">
+          {% for app in page_obj %}
+            <div class="col-12">
+              <div class="cpms-card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div class="flex-grow-1">
+                      <h4 class="h5 fw-bold mb-2">{{ app.job.title }}</h4>
+                      <p class="text-secondary mb-2">
+                        <i class="bi bi-building me-1"></i>{{ app.job.company_name }}
+                      </p>
+                      <p class="text-secondary small mb-2">
+                        <i class="bi bi-calendar me-1"></i>Applied on {{ app.applied_at|date:"M d, Y" }}
+                      </p>
+                    </div>
+                    <div class="text-end">
+                      <span class="badge bg-{% if app.status == 'shortlisted' %}success{% elif app.status == 'rejected' %}danger{% elif app.status == 'applied' %}primary{% elif app.status == 'interview_scheduled' %}warning{% else %}secondary{% endif %} mb-2 d-block">
+                        {{ app.get_status_display }}
+                      </span>
+                      <a href="{% url 'student:application_detail' app.pk %}" class="btn btn-sm btn-outline-primary">
+                        View Details
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        {% if page_obj.has_other_pages %}
+          <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+              {% if page_obj.has_previous %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}">Previous</a>
+                </li>
+              {% endif %}
+              {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                  <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                  </li>
+                {% else %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}{% if status_filter %}&status={{ status_filter }}{% endif %}">{{ num }}</a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+              {% if page_obj.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}">Next</a>
+                </li>
+              {% endif %}
+            </ul>
+          </nav>
+        {% endif %}
+      {% else %}
+        <div class="cpms-card">
+          <div class="card-body text-center py-5">
+            <i class="bi bi-inbox text-secondary" style="font-size: 4rem;"></i>
+            <h4 class="mt-3 mb-2">No applications found</h4>
+            <p class="text-secondary mb-3">Start applying to jobs to track your progress here</p>
+            <a href="{% url 'student:job_search' %}" class="btn btn-primary">Browse Jobs</a>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
