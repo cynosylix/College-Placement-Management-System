@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Applications · {{ job.title }} · Recruiter Portal{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="cpms-wide cpms-fade-in">
+      <div class="mb-3">
+        <a href="{% url 'recruiter:job_detail' job.pk %}" class="text-decoration-none">
+          <i class="bi bi-arrow-left me-1"></i>Back to Job
+        </a>
+      </div>
+
+      <div class="cpms-dashboard-header mb-4">
+        <h1 class="h3 fw-bold mb-1">{{ job.title }}</h1>
+        <p class="text-secondary mb-0">{{ job.company_name }} · Applications</p>
+      </div>
+
+      <div class="cpms-card mb-4">
+        <div class="card-body">
+          <div class="btn-group" role="group">
+            <a href="{% url 'recruiter:application_list' job.pk %}" class="btn btn-{% if not status_filter %}success{% else %}outline-success{% endif %}">All</a>
+            <a href="?status=applied" class="btn btn-{% if status_filter == 'applied' %}success{% else %}outline-success{% endif %}">Applied</a>
+            <a href="?status=under_review" class="btn btn-{% if status_filter == 'under_review' %}success{% else %}outline-success{% endif %}">Under Review</a>
+            <a href="?status=shortlisted" class="btn btn-{% if status_filter == 'shortlisted' %}success{% else %}outline-success{% endif %}">Shortlisted</a>
+            <a href="?status=rejected" class="btn btn-{% if status_filter == 'rejected' %}success{% else %}outline-success{% endif %}">Rejected</a>
+          </div>
+        </div>
+      </div>
+
+      {% if page_obj %}
+        <div class="cpms-card">
+          <div class="card-body p-0">
+            <div class="list-group list-group-flush">
+              {% for app in page_obj %}
+                <a href="{% url 'recruiter:application_detail' app.pk %}" class="list-group-item list-group-item-action border-0 px-4 py-3">
+                  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div>
+                      <h6 class="mb-1 fw-semibold">{{ app.student.user.get_full_name|default:app.student.user.username }}</h6>
+                      <p class="text-secondary small mb-0">{{ app.student.user.email }} · Applied {{ app.applied_at|date:"M d, Y" }}</p>
+                    </div>
+                    <span class="badge bg-{% if app.status == 'shortlisted' %}success{% elif app.status == 'rejected' %}danger{% else %}primary{% endif %}">
+                      {{ app.get_status_display }}
+                    </span>
+                  </div>
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        {% if page_obj.has_other_pages %}
+          <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+              {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}">Previous</a></li>
+              {% endif %}
+              {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                  <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                {% else %}
+                  <li class="page-item"><a class="page-link" href="?page={{ num }}{% if status_filter %}&status={{ status_filter }}{% endif %}">{{ num }}</a></li>
+                {% endif %}
+              {% endfor %}
+              {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}">Next</a></li>
+              {% endif %}
+            </ul>
+          </nav>
+        {% endif %}
+      {% else %}
+        <div class="cpms-card">
+          <div class="card-body text-center py-5">
+            <i class="bi bi-inbox text-secondary" style="font-size: 4rem;"></i>
+            <h4 class="mt-3 mb-2">No applications</h4>
+            <p class="text-secondary mb-0">Applications for this job will appear here.</p>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

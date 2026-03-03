@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}{{ student.user.username }} · TPO Portal{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="cpms-wide cpms-fade-in">
+      <div class="mb-3">
+        <a href="{% url 'tpo:student_list' %}" class="text-decoration-none">
+          <i class="bi bi-arrow-left me-1"></i>Back to Students
+        </a>
+      </div>
+
+      <div class="cpms-card mb-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+            <div>
+              <h1 class="h4 fw-bold mb-1">{{ student.user.username }}</h1>
+              <p class="text-secondary mb-0">{{ student.user.email }}</p>
+              <p class="text-muted small mb-0">Enrollment: {{ student.enrollment_number|default:"—" }}</p>
+            </div>
+            <div>
+              {% if student.placement_eligible %}
+                <span class="badge bg-success fs-6">Placement Eligible</span>
+              {% else %}
+                <span class="badge bg-secondary fs-6">Not Eligible</span>
+              {% endif %}
+            </div>
+          </div>
+          <hr>
+          <div class="row g-3">
+            <div class="col-md-4"><strong>Branch</strong>: {{ student.branch|default:"—" }}</div>
+            <div class="col-md-4"><strong>Course</strong>: {{ student.course|default:"—" }}</div>
+            <div class="col-md-4"><strong>Year</strong>: {{ student.year|default:"—" }}</div>
+            <div class="col-md-4"><strong>CGPA</strong>: {{ student.cgpa|default:"—" }}</div>
+            <div class="col-md-4"><strong>Graduation Year</strong>: {{ student.graduation_year|default:"—" }}</div>
+          </div>
+          <hr>
+          <h5 class="fw-bold mb-2">Placement Eligibility</h5>
+          <form method="post">
+            {% csrf_token %}
+            <div class="form-check">
+              {{ form.placement_eligible }}
+              <label class="form-check-label" for="{{ form.placement_eligible.id_for_label }}">Mark as placement eligible</label>
+            </div>
+            <button type="submit" class="btn btn-dark mt-2">Update</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="cpms-card">
+        <div class="card-body">
+          <h5 class="fw-bold mb-3">Recent Applications</h5>
+          {% if applications %}
+            <div class="list-group list-group-flush">
+              {% for app in applications %}
+                <a href="{% url 'tpo:application_detail' app.pk %}" class="list-group-item list-group-item-action border-0 px-0 py-2">
+                  <div class="d-flex justify-content-between">
+                    <span>{{ app.job.title }} · {{ app.job.company_name }}</span>
+                    <span class="badge bg-{% if app.status == 'shortlisted' %}success{% elif app.status == 'rejected' %}danger{% else %}primary{% endif %}">{{ app.get_status_display }}</span>
+                  </div>
+                </a>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="text-secondary mb-0">No applications yet.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

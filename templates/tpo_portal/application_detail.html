@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Application · TPO Portal{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="cpms-wide cpms-fade-in">
+      <div class="mb-3">
+        <a href="{% url 'tpo:application_list' %}" class="text-decoration-none">
+          <i class="bi bi-arrow-left me-1"></i>Back to Applications
+        </a>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-12 col-lg-8">
+          <div class="cpms-card mb-4">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+                <div>
+                  <h1 class="h4 fw-bold mb-1">{{ application.student.user.username }}</h1>
+                  <p class="text-secondary mb-0">{{ application.student.user.email }}</p>
+                  <p class="text-muted small mb-0">Applied {{ application.applied_at|date:"M d, Y H:i" }}</p>
+                </div>
+                <span class="badge bg-{% if application.status == 'shortlisted' %}success{% elif application.status == 'rejected' %}danger{% else %}primary{% endif %} fs-6">
+                  {{ application.get_status_display }}
+                </span>
+              </div>
+
+              <h5 class="fw-bold mb-2">Update Status</h5>
+              <form method="post" class="mb-4">
+                {% csrf_token %}
+                <div class="row g-2 align-items-end">
+                  <div class="col-md-6">
+                    <label class="form-label">Status</label>
+                    {{ form.status }}
+                  </div>
+                  <div class="col-md-6">
+                    <button type="submit" name="update_status" value="1" class="btn btn-dark">Update Status</button>
+                  </div>
+                </div>
+              </form>
+
+              <hr>
+              <h5 class="fw-bold mb-2">Job</h5>
+              <p class="mb-1"><strong>{{ application.job.title }}</strong> · {{ application.job.company_name }}</p>
+              <hr>
+              {% if application.cover_letter %}
+                <h5 class="fw-bold mb-2">Cover Letter</h5>
+                <div class="text-secondary">{{ application.cover_letter|linebreaks }}</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+          <div class="cpms-card">
+            <div class="card-body">
+              <h5 class="fw-bold mb-3">Interview</h5>
+              {% if interview %}
+                <p class="mb-2"><strong>When:</strong> {{ interview.scheduled_at|date:"M d, Y H:i" }}</p>
+                {% if interview.location %}<p class="mb-2"><strong>Where:</strong> {{ interview.location }}</p>{% endif %}
+                <p class="mb-2"><span class="badge bg-secondary">{{ interview.get_status_display }}</span></p>
+              {% else %}
+                <p class="text-secondary small mb-3">No interview scheduled yet.</p>
+              {% endif %}
+
+              <hr>
+              <h5 class="fw-bold mb-3">Schedule / Edit Interview</h5>
+              <form method="post">
+                {% csrf_token %}
+                {% for field in interview_form %}
+                  <div class="mb-2">
+                    <label class="form-label small">{{ field.label }}</label>
+                    {{ field }}
+                  </div>
+                {% endfor %}
+                <button type="submit" name="schedule_interview" value="1" class="btn btn-dark btn-sm mt-2">Save Interview</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

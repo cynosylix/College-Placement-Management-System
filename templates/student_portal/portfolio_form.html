@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} · Student Portal{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="cpms-narrow cpms-fade-in">
+      <div class="mb-3">
+        <a href="{% url 'student:portfolio_list' %}" class="text-decoration-none">
+          <i class="bi bi-arrow-left me-1"></i>Back to Portfolio
+        </a>
+      </div>
+
+      <div class="cpms-card">
+        <div class="card-body">
+          <h1 class="h4 fw-bold mb-4">{{ title }}</h1>
+          <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+              <div class="mb-3">
+                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                  <div class="invalid-feedback d-block">{{ field.errors.0 }}</div>
+                {% endif %}
+              </div>
+            {% endfor %}
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save me-2"></i>Save
+              </button>
+              <a href="{% url 'student:portfolio_list' %}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio · Student Portal{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="cpms-wide cpms-fade-in">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 fw-bold mb-0">
+          <i class="bi bi-folder2-open me-2"></i>My Portfolio
+        </h1>
+        <a href="{% url 'student:portfolio_add' %}" class="btn btn-primary">
+          <i class="bi bi-plus me-1"></i>Add Item
+        </a>
+      </div>
+
+      {% if portfolio_items %}
+        <div class="row g-4">
+          {% for item in portfolio_items %}
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="cpms-card h-100">
+                <div class="card-body">
+                  <span class="badge bg-secondary mb-2">{{ item.get_project_type_display }}</span>
+                  <h4 class="h5 fw-bold mb-2">{{ item.title }}</h4>
+                  <p class="text-secondary small mb-2">{{ item.description|truncatewords:15 }}</p>
+                  {% if item.technologies %}
+                    <p class="text-muted small mb-2"><i class="bi bi-tags me-1"></i>{{ item.technologies|truncatewords:5 }}</p>
+                  {% endif %}
+                  {% if item.date_completed %}
+                    <p class="text-muted small mb-3">{{ item.date_completed|date:"M Y" }}</p>
+                  {% endif %}
+                  <div class="d-flex gap-2">
+                    {% if item.url %}
+                      <a href="{{ item.url }}" target="_blank" class="btn btn-sm btn-outline-primary">View</a>
+                    {% endif %}
+                    <a href="{% url 'student:portfolio_delete' item.pk %}" class="btn btn-sm btn-outline-danger ms-auto" onclick="return confirm('Remove this item?')">
+                      <i class="bi bi-trash"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="cpms-card">
+          <div class="card-body text-center py-5">
+            <i class="bi bi-folder2-open text-secondary" style="font-size: 4rem;"></i>
+            <h4 class="mt-3 mb-2">No portfolio items yet</h4>
+            <p class="text-secondary mb-3">Add projects and achievements to showcase your work</p>
+            <a href="{% url 'student:portfolio_add' %}" class="btn btn-primary">Add Portfolio Item</a>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

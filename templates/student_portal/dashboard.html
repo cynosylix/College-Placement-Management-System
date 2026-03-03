@@ -1,8 +1,12 @@
-{% extends "base.html" %}
+{% extends "base_dashboard.html" %}
 
 {% block title %}Student Dashboard · CPMS{% endblock %}
 
-{% block content %}
+{% block sidebar %}
+  {% include "includes/_sidebar_student.html" %}
+{% endblock %}
+
+{% block dashboard_content %}
   <div class="container">
     <div class="cpms-wide cpms-fade-in">
       <div class="cpms-dashboard-header">
@@ -200,4 +204,4 @@
       </div>
     </div>
   </div>
-{% endblock %}
+{% endblock dashboard_content %}

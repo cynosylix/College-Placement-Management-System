@@ -77,14 +77,26 @@
               <strong>You have applied for this position.</strong>
               <a href="{% url 'student:application_detail' application.pk %}" class="alert-link">View Application Status</a>
             </div>
+          {% elif not can_apply %}
+            <div class="alert alert-warning">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              <strong>You are not eligible to apply for this position.</strong>
+              Contact the placement cell if you believe this is an error.
+            </div>
           {% else %}
             <hr>
             <h3 class="h5 fw-bold mb-3">Apply for this Position</h3>
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
               {% csrf_token %}
               <div class="mb-3">
-                <label class="form-label">Select Resume</label>
+                <label class="form-label">Select existing resume</label>
                 {{ app_form.resume }}
+                <div class="form-text">Choose a resume you created earlier, or upload a new one below.</div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Or upload a new resume</label>
+                <input type="file" name="resume_file" class="form-control" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                <div class="form-text">PDF or Word (DOC/DOCX) only. Max 5 MB. If you upload a file, it will be used instead of the selection above.</div>
               </div>
               <div class="mb-3">
                 <label class="form-label">Cover Letter (Optional)</label>

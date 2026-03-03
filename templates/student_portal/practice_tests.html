@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Practice Tests · Student Portal{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="cpms-wide cpms-fade-in">
+      <div class="cpms-dashboard-header mb-4">
+        <h1 class="h3 fw-bold mb-0">
+          <i class="bi bi-journal-check me-2"></i>Practice Tests
+        </h1>
+        <p class="text-secondary mb-0 mt-2">Aptitude, technical, and coding practice</p>
+      </div>
+
+      {% if tests %}
+        <div class="row g-4">
+          {% for test in tests %}
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="cpms-card h-100">
+                <div class="card-body">
+                  <span class="badge bg-primary mb-2">{{ test.get_test_type_display }}</span>
+                  <h4 class="h5 fw-bold mb-2">{{ test.title }}</h4>
+                  {% if test.description %}
+                    <p class="text-secondary small mb-2">{{ test.description|truncatewords:20 }}</p>
+                  {% endif %}
+                  {% if test.duration_minutes %}
+                    <p class="text-muted small mb-3">
+                      <i class="bi bi-clock me-1"></i>{{ test.duration_minutes }} min
+                    </p>
+                  {% endif %}
+                  <button type="button" class="btn btn-outline-primary btn-sm" disabled>Coming soon</button>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="cpms-card">
+          <div class="card-body text-center py-5">
+            <i class="bi bi-journal-check text-secondary" style="font-size: 4rem;"></i>
+            <h4 class="mt-3 mb-2">No practice tests available</h4>
+            <p class="text-secondary mb-0">Tests will be added by the placement cell.</p>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

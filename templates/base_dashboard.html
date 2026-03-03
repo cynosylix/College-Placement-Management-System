@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  <div class="cpms-dashboard-layout">
+    <aside class="cpms-sidebar">
+      {% block sidebar %}{% endblock %}
+    </aside>
+    <div class="cpms-dashboard-content">
+      {% block dashboard_content %}{% endblock %}
+    </div>
+  </div>
+{% endblock %}

@@ -338,15 +338,58 @@ def job_detail(request: HttpRequest, pk: int) -> HttpResponse:
         if 'apply' in request.POST:
             if application:
                 messages.warning(request, "You have already applied for this job.")
+            elif not student.placement_eligible:
+                messages.error(request, "You are not marked as placement-eligible. Contact the placement cell.")
+            elif job.min_cgpa is not None and (student.cgpa is None or student.cgpa < job.min_cgpa):
+                messages.error(
+                    request,
+                    f"This job requires minimum CGPA {job.min_cgpa}. Your current CGPA does not meet the criteria."
+                )
             else:
-                app_form = ApplicationForm(request.POST)
-                if app_form.is_valid():
-                    app = app_form.save(commit=False)
-                    app.student = student
-                    app.job = job
-                    app.save()
-                    messages.success(request, "Application submitted successfully!")
-                    return redirect('student:application_detail', pk=app.pk)
+                uploaded_file = request.FILES.get('resume_file')
+                if uploaded_file:
+                    # Validate file type (PDF, DOC, DOCX) and size (e.g. 5MB)
+                    allowed_types = (
+                        'application/pdf',
+                        'application/msword',  # .doc
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',  # .docx
+                    )
+                    if uploaded_file.content_type not in allowed_types:
+                        messages.error(
+                            request,
+                            "Invalid file type. Please upload a PDF or Word document (DOC/DOCX)."
+                        )
+                    elif uploaded_file.size > 5 * 1024 * 1024:  # 5MB
+                        messages.error(request, "File is too large. Maximum size is 5 MB.")
+                    else:
+                        title = f"Resume for {job.title[:100]}"
+                        new_resume = Resume.objects.create(
+                            student=student,
+                            title=title,
+                            content="",
+                            file=uploaded_file,
+                            is_default=False,
+                        )
+                        cover_letter = request.POST.get('cover_letter', '')
+                        app = Application.objects.create(
+                            student=student,
+                            job=job,
+                            resume=new_resume,
+                            cover_letter=cover_letter,
+                        )
+                        messages.success(request, "Application submitted successfully with uploaded resume!")
+                        return redirect('student:application_detail', pk=app.pk)
+                else:
+                    app_form = ApplicationForm(request.POST)
+                    if app_form.is_valid():
+                        app = app_form.save(commit=False)
+                        app.student = student
+                        app.job = job
+                        app.save()
+                        messages.success(request, "Application submitted successfully!")
+                        return redirect('student:application_detail', pk=app.pk)
+                    if not application:  # only show form errors when we didn't just try file upload
+                        messages.error(request, "Please select a resume or upload a new one.")
         elif 'save' in request.POST:
             SavedJob.objects.get_or_create(student=student, job=job)
             messages.success(request, "Job saved!")
@@ -358,12 +401,19 @@ def job_detail(request: HttpRequest, pk: int) -> HttpResponse:
     
     app_form = ApplicationForm(initial={'resume': resumes.filter(is_default=True).first()})
     
+    # Eligibility for applying: placement_eligible and CGPA if job has min_cgpa
+    can_apply = (
+        student.placement_eligible
+        and (job.min_cgpa is None or (student.cgpa is not None and student.cgpa >= job.min_cgpa))
+    )
+    
     context = {
         'job': job,
         'application': application,
         'is_saved': is_saved,
         'app_form': app_form,
         'resumes': resumes,
+        'can_apply': can_apply,
     }
     return render(request, "student_portal/job_detail.html", context)
 

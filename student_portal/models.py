@@ -27,6 +27,9 @@ class StudentProfile(models.Model):
     bio = models.TextField(blank=True, help_text="Brief introduction about yourself")
     achievements = models.TextField(blank=True)
     
+    # Placement eligibility (TPO can set this to False to bar a student from applying)
+    placement_eligible = models.BooleanField(default=True)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -72,10 +75,11 @@ class Certification(models.Model):
 
 
 class Resume(models.Model):
-    """Multiple resume versions for a student"""
+    """Multiple resume versions for a student (text content and/or uploaded file)"""
     student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name='resumes')
     title = models.CharField(max_length=200, help_text="e.g., Software Engineer Resume, Data Science Resume")
-    content = models.TextField(help_text="Resume content in JSON or formatted text")
+    content = models.TextField(blank=True, help_text="Resume content in JSON or formatted text (optional if file is uploaded)")
+    file = models.FileField(upload_to='resumes/%Y/%m/', null=True, blank=True, help_text="Uploaded resume (PDF, DOC)")
     is_default = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -139,6 +143,9 @@ class JobPosting(models.Model):
     requirements = models.TextField(help_text="Required skills, qualifications, etc.")
     location = models.CharField(max_length=200, blank=True)
     salary_range = models.CharField(max_length=100, blank=True)
+    # Eligibility: min CGPA (optional); eligibility_criteria free text for TPO/recruiter
+    min_cgpa = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
+    eligibility_criteria = models.TextField(blank=True)
     job_type = models.CharField(
         max_length=50,
         choices=[

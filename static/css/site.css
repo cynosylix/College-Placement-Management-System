@@ -409,6 +409,54 @@ body {
   animation: fadeInUp 0.5s ease-out;
 }
 
+/* Dashboard layout: sidebar + content */
+.cpms-dashboard-layout {
+  display: flex;
+  min-height: calc(100vh - 120px);
+}
+.cpms-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.95);
+  border-right: 1px solid var(--cpms-border);
+  padding: 1.5rem 0;
+}
+.cpms-dashboard-content {
+  flex: 1;
+  overflow-x: auto;
+  padding: 0 0 2rem;
+}
+@media (max-width: 768px) {
+  .cpms-dashboard-layout {
+    flex-direction: column;
+  }
+  .cpms-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--cpms-border);
+    padding: 1rem;
+  }
+}
+.cpms-sidebar .nav-link {
+  border-radius: 12px;
+  padding: 0.6rem 1.25rem;
+  color: var(--cpms-text);
+  font-weight: 500;
+}
+.cpms-sidebar .nav-link:hover {
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--cpms-primary);
+}
+.cpms-sidebar .nav-link.active {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(79, 70, 229, 0.08));
+  color: var(--cpms-primary);
+}
+.cpms-sidebar .nav-link i {
+  margin-right: 0.75rem;
+  width: 1.25rem;
+  text-align: center;
+}
+
 /* Responsive adjustments */
 @media (max-width: 576px) {
   .cpms-card .card-body {
