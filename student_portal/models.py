@@ -16,7 +16,7 @@ class StudentProfile(models.Model):
     portfolio_url = models.URLField(blank=True)
     
     # Academic Information
-    enrollment_number = models.CharField(max_length=50, unique=True, blank=True)
+    enrollment_number = models.CharField(max_length=50, unique=True, null=True, blank=True, default=None)
     course = models.CharField(max_length=100, blank=True)  # B.Tech, M.Tech, etc.
     branch = models.CharField(max_length=100, blank=True)  # CSE, ECE, etc.
     year = models.CharField(max_length=20, blank=True)  # 1st, 2nd, 3rd, 4th
